@@ -1,0 +1,41 @@
+{
+  "name": "gendiff",
+  "version": "1.0.0",
+  "description": "backend-project-lvl2",
+  "bin": {
+    "gendiff": "dist/bin/gendiff.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikhailsmyslov/backend-project-lvl2.git"
+  },
+  "author": "Mikhail Smyslov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikhailsmyslov/backend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/mikhailsmyslov/backend-project-lvl2#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.4",
+    "@babel/node": "^7.5.0",
+    "@babel/preset-env": "^7.5.4",
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.18.0"
+  },
+  "dependencies": {
+    "commander": "^2.20.0"
+  }
+}
