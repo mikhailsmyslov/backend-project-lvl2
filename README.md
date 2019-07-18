@@ -7,10 +7,11 @@ ______________________
 [![Test Coverage](https://api.codeclimate.com/v1/badges/4a4251574ea3f5906735/test_coverage)](https://codeclimate.com/github/mikhailsmyslov/backend-project-lvl2/test_coverage)
 
 ### About
-My second project on [Hexlet](https://ru.hexlet.io)
+My second project on [Hexlet](https://ru.hexlet.io)  
 Compares two configuration files and shows a difference.
 
 ### Installation
 `npm install gendiff -g`
+[![asciicast](https://asciinema.org/a/GtTLShBdN8a9ueyz81zcq5z6T.svg)](https://asciinema.org/a/GtTLShBdN8a9ueyz81zcq5z6T)
 
 ### Usage
