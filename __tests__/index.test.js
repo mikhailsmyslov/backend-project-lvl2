@@ -10,6 +10,6 @@ test('JSON', () => {
   expect(gendiff(`${before}.json`, `${after}.json`)).toEqual(expected);
 });
 
-test('YAML', () => {
+test('YML', () => {
   expect(gendiff(`${before}.yml`, `${after}.yml`)).toEqual(expected);
 });
