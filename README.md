@@ -12,6 +12,6 @@ Compares two configuration files and shows a difference.
 
 ### Installation
 `npm install gendiff -g`
-[![asciicast](https://asciinema.org/a/GtTLShBdN8a9ueyz81zcq5z6T.svg)](https://asciinema.org/a/GtTLShBdN8a9ueyz81zcq5z6T)
 
 ### Usage
+[![asciicast](https://asciinema.org/a/Djp9JYxg2jhSLoGW8Zh1iKacC.svg)](https://asciinema.org/a/Djp9JYxg2jhSLoGW8Zh1iKacC)

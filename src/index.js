@@ -1,37 +1,59 @@
-import fs from 'fs';
-import * as _ from 'lodash';
+import _ from 'lodash';
+import parse from './parsers';
 
-const getFileContent = pathToFile => JSON.parse(fs.readFileSync(pathToFile, 'UTF-8'));
+const states = [
+  // b - "before"
+  // a - "after"
+  {
+    state: ['+'],
+    check: b => b === undefined,
+  },
+  {
+    state: ['-'],
+    check: (b, a) => a === undefined,
+  },
+  {
+    state: [' '],
+    check: (b, a) => b === a,
+  },
+  {
+    state: ['-', '+'],
+    check: (b, a) => b !== a,
+  },
+];
 
-const gendiff = (pathToFile1, pathToFile2) => {
-  const before = getFileContent(pathToFile1);
-  const after = getFileContent(pathToFile2);
+const getKeyState = (b, a) => states.find(({ check }) => check(b, a));
 
-  const keys = _.union(Object.keys(before), Object.keys(after));
-
-  const ast = keys.reduce((acc, key) => {
+const generateAst = (before, after) => Object.keys({ ...before, ...after })
+  .reduce((acc, key) => {
     const beforeValue = before[key];
     const afterValue = after[key];
-    return { ...acc, [key]: [beforeValue, afterValue] };
-  }, {});
+    const { state } = getKeyState(beforeValue, afterValue);
+    const values = _.uniq(_.without([beforeValue, afterValue], undefined));
+    const record = {
+      key,
+      state,
+      values,
+    };
+    return [...acc, record];
+  },
+  []);
 
-  const reducer = (val, key) => {
-    const [bef, aft] = val;
-    switch (true) {
-      case bef === aft:
-        return [`  ${key}: ${bef}`];
-      case bef === undefined:
-        return [`+ ${key}: ${aft}`];
-      case aft === undefined:
-        return [`- ${key}: ${bef}`];
-      default:
-        return [`- ${key}: ${bef}`, `+ ${key}: ${aft}`];
-    }
-  };
-
-  const diff = _.reduce(ast, (acc, val, key) => [...acc, ...reducer(val, key)], []);
-
-  return `{\n  ${diff.join('\n  ')}\n}`;
+const render = (ast) => {
+  const text = ast.reduce((acc, item) => {
+    const {
+      key,
+      state,
+      values,
+    } = item;
+    return acc.concat(values.map((val, ind) => `  ${state[ind]} ${key}: ${val}`));
+  }, []).join('\n');
+  return `{\n${text}\n}`;
 };
 
-export default gendiff;
+export default (pathToFile1, pathToFile2) => {
+  const before = parse(pathToFile1);
+  const after = parse(pathToFile2);
+  const ast = generateAst(before, after);
+  return render(ast);
+};
