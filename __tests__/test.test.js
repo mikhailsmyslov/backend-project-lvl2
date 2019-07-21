@@ -1,16 +1,15 @@
 import fs from 'fs';
 import gendiff from '../src';
 
-const expected = fs.readFileSync(`${__dirname}/__fixtures__/expected.txt`, 'UTF-8');
+const path = `${__dirname}/__fixtures__`;
+const expected = fs.readFileSync(`${path}/expected.txt`, 'UTF-8');
+const before = `${path}/before`;
+const after = `${path}/after`;
 
 test('JSON', () => {
-  const before = `${__dirname}/__fixtures__/before.json`;
-  const after = `${__dirname}/__fixtures__/after.json`;
-  expect(gendiff(before, after)).toEqual(expected);
+  expect(gendiff(`${before}.json`, `${after}.json`)).toEqual(expected);
 });
 
 test('YAML', () => {
-  const before = `${__dirname}/__fixtures__/before.yml`;
-  const after = `${__dirname}/__fixtures__/after.yml`;
-  expect(gendiff(before, after)).toEqual(expected);
+  expect(gendiff(`${before}.yml`, `${after}.yml`)).toEqual(expected);
 });
