@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import fs from 'fs';
+import path from 'path';
 import parse from './parsers';
 
 const states = [
@@ -52,8 +54,12 @@ const render = (ast) => {
 };
 
 export default (pathToFile1, pathToFile2) => {
-  const before = parse(pathToFile1);
-  const after = parse(pathToFile2);
+  const beforeExt = path.extname(pathToFile1);
+  const afterExt = path.extname(pathToFile2);
+  const beforeData = fs.readFileSync(pathToFile1, 'UTF-8');
+  const afterData = fs.readFileSync(pathToFile2, 'UTF-8');
+  const before = parse(beforeExt, beforeData);
+  const after = parse(afterExt, afterData);
   const ast = generateAst(before, after);
   return render(ast);
 };
