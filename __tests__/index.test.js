@@ -3,10 +3,20 @@ import gendiff from '../src';
 
 const path = `${__dirname}/__fixtures__`;
 const expected = fs.readFileSync(`${path}/expected.txt`, 'UTF-8');
+const expectedRecursive = fs.readFileSync(`${path}/expectedrecursive.txt`, 'UTF-8');
 const before = `${path}/before`;
 const after = `${path}/after`;
+const beforeRecursive = `${path}/beforeRecursive`;
+const afterRecursive = `${path}/afterRecursive`;
 
 test.each(['.json', '.yml', '.ini'])(
-  '%s',
-  format => expect(gendiff(`${before}${format}`, `${after}${format}`)).toEqual(expected),
+  'Flat %s',
+  format => expect(gendiff(`${before}${format}`, `${after}${format}`))
+    .toEqual(expected),
+);
+
+test.each(['.json', '.yml', '.ini'])(
+  'Recursive %s',
+  format => expect(gendiff(`${beforeRecursive}${format}`, `${afterRecursive}${format}`))
+    .toEqual(expectedRecursive),
 );
