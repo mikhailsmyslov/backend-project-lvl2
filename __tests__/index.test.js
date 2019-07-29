@@ -3,7 +3,7 @@ import gendiff from '../src';
 
 const path = `${__dirname}/__fixtures__`;
 const expected = fs.readFileSync(`${path}/expected.txt`, 'UTF-8');
-const expectedRecursive = fs.readFileSync(`${path}/expectedrecursive.txt`, 'UTF-8');
+const expectedRecursive = fs.readFileSync(`${path}/expectedRecursive.txt`, 'UTF-8');
 const before = `${path}/before`;
 const after = `${path}/after`;
 const beforeRecursive = `${path}/beforeRecursive`;
