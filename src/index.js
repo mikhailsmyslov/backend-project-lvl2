@@ -1,65 +1,61 @@
 import fs from 'fs';
 import path from 'path';
 import parse from './parsers';
-import render from './renderers';
+import getFormatter from './formatters';
 
-const settingActions = [
+const propertyActions = [
   {
     state: 'added',
     check: b => b === undefined,
-    process: (b, a) => a,
+    process: (b, a) => [a],
   },
   {
     state: 'deleted',
     check: (b, a) => a === undefined,
-    process: b => b,
+    process: b => [b],
   },
   {
     state: 'node',
     check: (b, a) => (b instanceof Object) && (a instanceof Object),
-    process: () => '',
+    process: () => [],
   },
   {
     state: 'same',
     check: (b, a) => b === a,
-    process: b => b,
+    process: b => [b],
   },
   {
     state: 'changed',
     check: (b, a) => b !== a,
-    process: (b, a) => ({ old: b, new: a }),
+    process: (b, a) => [b, a],
   },
 ];
 
-const getSettingActions = (b, a) => settingActions.find(({ check }) => check(b, a));
+const getpropertyActions = (b, a) => propertyActions.find(({ check }) => check(b, a));
 
-const buildAst = (before, after) => Object.keys({ ...before, ...after })
-  .reduce((acc, key) => {
-    const beforeValue = before[key];
-    const afterValue = after[key];
-    const { state, process } = getSettingActions(beforeValue, afterValue);
-    const children = state === 'node'
-      ? buildAst(beforeValue, afterValue)
-      : [];
-    const value = process(beforeValue, afterValue);
-    const record = {
-      key,
-      state,
-      value,
-      children,
-    };
-    return acc.concat(record);
-  },
-  []);
+const buildAst = (before, after) => Object.keys({ ...before, ...after }).map((key) => {
+  const beforeValue = before[key];
+  const afterValue = after[key];
+  const { state, process } = getpropertyActions(beforeValue, afterValue);
+  const children = state === 'node'
+    ? buildAst(beforeValue, afterValue)
+    : [];
+  const value = process(beforeValue, afterValue);
+  return {
+    key, state, value, children,
+  };
+});
 
-export default (pathToFile1, pathToFile2) => {
-  const fileType1 = path.extname(pathToFile1);
-  const fileType2 = path.extname(pathToFile2);
-  const beforeData = fs.readFileSync(pathToFile1, 'UTF-8');
-  const afterData = fs.readFileSync(pathToFile2, 'UTF-8');
-  const before = parse(fileType1, beforeData);
-  const after = parse(fileType2, afterData);
+const getParsedContent = (pathToFile) => {
+  const format = path.extname(pathToFile);
+  const content = fs.readFileSync(pathToFile, 'UTF-8');
+  return parse(format, content);
+};
+
+export default (pathToFile1, pathToFile2, formatter = 'default') => {
+  const before = getParsedContent(pathToFile1);
+  const after = getParsedContent(pathToFile2);
+  const render = getFormatter(formatter);
   const ast = buildAst(before, after);
-  // console.log(JSON.stringify(ast, null, '\t'));
   return render(ast);
 };

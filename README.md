@@ -15,4 +15,3 @@ Compares two configuration files and shows a difference.
 
 ### Usage
 [![asciicast](https://asciinema.org/a/hieqISOVUGIYhXPWm135HvCh6.svg)](https://asciinema.org/a/hieqISOVUGIYhXPWm135HvCh6)
-<script id="asciicast-hieqISOVUGIYhXPWm135HvCh6" src="https://asciinema.org/a/hieqISOVUGIYhXPWm135HvCh6.js" async></script>
