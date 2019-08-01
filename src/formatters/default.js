@@ -1,36 +1,33 @@
-import { flattenDeep, isObject } from 'lodash';
+import _ from 'lodash';
 
 const prefixes = {
-  added: ['+ '],
-  deleted: ['- '],
-  same: ['  '],
-  changed: ['- ', '+ '],
-  node: ['  '],
+  added: ['+'], deleted: ['-'], same: [' '], changed: ['-', '+'], node: [' '],
 };
 
-const makeSpacing = depth => ' '.repeat(depth);
+const mkIndent = spacesCount => ' '.repeat(spacesCount);
 
-const toString = (value, spaceCount) => {
-  if (isObject(value)) {
-    const text = Object.entries(value)
-      .map(([key, val]) => `${makeSpacing(spaceCount + 4)}${key}: ${val}`)
-      .join('\n');
-    return `{\n${text}\n${makeSpacing(spaceCount)}}`;
-  }
-  return value;
+const stringify = (value, spacesCount) => {
+  if (!_.isObject(value)) return value;
+  const text = Object.entries(value)
+    .map(([k, v]) => `${mkIndent(spacesCount + 4)}${k}: ${v}`).join('\n');
+  return `{\n${text}\n${mkIndent(spacesCount)}}`;
 };
 
-const render = (ast, spaceCount = 0) => {
+const render = (ast, spacesCount = 0) => {
   const mapped = ast.map(({
-    key, value, state, children,
+    key, state, value, oldValue, newValue, children,
   }) => {
-    const content = state === 'node'
-      ? [render(children, spaceCount + 4)]
-      : value;
-    return prefixes[state].map((sign, ind) => `${makeSpacing(spaceCount + 2)}${sign}${key}: ${toString(content[ind], spaceCount + 4)}`);
+    const prefix = prefixes[state];
+
+    const values = state === 'node'
+      ? [render(children, spacesCount + 4)]
+      : _.without([value, oldValue, newValue], undefined);
+
+    return prefix.map((p, i) => `${mkIndent(spacesCount + 2)}${p} ${key}: ${stringify(values[i], spacesCount + 4)}`);
   });
-  const text = flattenDeep(mapped).join('\n');
-  return `{\n${text}\n${makeSpacing(spaceCount)}}`;
+
+  const text = _.flattenDeep(mapped).join('\n');
+  return `{\n${text}\n${mkIndent(spacesCount)}}`;
 };
 
 export default render;
