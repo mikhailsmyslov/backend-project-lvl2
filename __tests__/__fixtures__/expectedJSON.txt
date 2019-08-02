@@ -1,0 +1,98 @@
+[
+    {
+        "key": "common",
+        "state": "node",
+        "children": [
+            {
+                "key": "setting1",
+                "state": "same",
+                "value": "Value 1"
+            },
+            {
+                "key": "setting2",
+                "state": "deleted",
+                "value": "200"
+            },
+            {
+                "key": "setting3",
+                "state": "changed",
+                "oldValue": true,
+                "newValue": {
+                    "key": "value"
+                }
+            },
+            {
+                "key": "setting6",
+                "state": "node",
+                "children": [
+                    {
+                        "key": "key",
+                        "state": "same",
+                        "value": "value"
+                    },
+                    {
+                        "key": "ops",
+                        "state": "added",
+                        "value": "vops"
+                    }
+                ]
+            },
+            {
+                "key": "follow",
+                "state": "added",
+                "value": false
+            },
+            {
+                "key": "setting4",
+                "state": "added",
+                "value": "blah blah"
+            },
+            {
+                "key": "setting5",
+                "state": "added",
+                "value": {
+                    "key5": "value5"
+                }
+            }
+        ]
+    },
+    {
+        "key": "group1",
+        "state": "node",
+        "children": [
+            {
+                "key": "baz",
+                "state": "changed",
+                "oldValue": "bas",
+                "newValue": "bars"
+            },
+            {
+                "key": "foo",
+                "state": "same",
+                "value": "bar"
+            },
+            {
+                "key": "nest",
+                "state": "changed",
+                "oldValue": {
+                    "key": "value"
+                },
+                "newValue": "str"
+            }
+        ]
+    },
+    {
+        "key": "group2",
+        "state": "deleted",
+        "value": {
+            "abc": "12345"
+        }
+    },
+    {
+        "key": "group3",
+        "state": "added",
+        "value": {
+            "fee": "100500"
+        }
+    }
+]

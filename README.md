@@ -8,10 +8,21 @@ ______________________
 
 ### About
 My second project on [Hexlet](https://ru.hexlet.io)  
-Compares two configuration files and shows a difference.
+
+Utility compares two configuration files and shows a difference. Works with .json, .yml and .ini formats.  
+Output could be setted as a plain text, json or tree structure.
 
 ### Installation
 `npm install gendiff -g`
 
 ### Usage
-[![asciicast](https://asciinema.org/a/0EkzG7lLcU8VagUVlLyUobvLI.svg)](https://asciinema.org/a/0EkzG7lLcU8VagUVlLyUobvLI)
+[![asciicast](https://asciinema.org/a/60Weu5x6JwEe9dVEqefQvXleP.svg)](https://asciinema.org/a/60Weu5x6JwEe9dVEqefQvXleP)
+
+`gendiff [options] <firstConfig> <secondConfig>`  
+
+#### Options
+`-f plain` - set output as a plain text;
+`-f json` - set output as a json string;
+default (no option `-f` specified) - tree structure;  
+
+For other options use `gendiff -h`
