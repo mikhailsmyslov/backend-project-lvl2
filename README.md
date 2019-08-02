@@ -21,8 +21,8 @@ Output could be setted as a plain text, json or tree structure.
 `gendiff [options] <firstConfig> <secondConfig>`  
 
 #### Options
-`-f plain` - set output as a plain text;
-`-f json` - set output as a json string;
+`-f plain` - set output as a plain text;  
+`-f json` - set output as a json string;  
 default (no option `-f` specified) - tree structure;  
 
 For other options use `gendiff -h`
