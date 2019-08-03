@@ -10,19 +10,19 @@ ______________________
 My second project on [Hexlet](https://ru.hexlet.io)  
 
 Utility compares two configuration files and shows a difference. Works with .json, .yml and .ini formats.  
-Output could be setted as a plain text, json or tree structure.
+Output could be setted as a plain text, json or stringified tree structure.
 
 ### Installation
 `npm install gendiff -g`
 
 ### Usage
-[![asciicast](https://asciinema.org/a/60Weu5x6JwEe9dVEqefQvXleP.svg)](https://asciinema.org/a/60Weu5x6JwEe9dVEqefQvXleP)
+[![asciicast](https://asciinema.org/a/44UQr2cncup4FLfHvlASIMah1.svg)](https://asciinema.org/a/44UQr2cncup4FLfHvlASIMah1)
 
 `gendiff [options] <firstConfig> <secondConfig>`  
 
 #### Options
 `-f plain` - set output as a plain text;  
 `-f json` - set output as a json string;  
-default (no option `-f` specified) - tree structure;  
+default (no option `-f` specified) - stringified tree structure;  
 
 For other options use `gendiff -h`
