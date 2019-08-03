@@ -8,38 +8,39 @@ const processValues = (oldValue, newValue) => ({ oldValue, newValue });
 const propertyActions = [
   {
     type: 'added',
-    check: b => b === undefined,
+    check: oldValue => oldValue === undefined,
     process: processValues,
   },
   {
     type: 'deleted',
-    check: (b, a) => a === undefined,
+    check: (oldValue, newValue) => newValue === undefined,
     process: processValues,
   },
   {
     type: 'nested',
-    check: (b, a) => (b instanceof Object) && (a instanceof Object),
-    process: (b, a, fn) => ({ children: fn(b, a) }),
+    check: (oldValue, newValue) => (oldValue instanceof Object) && (newValue instanceof Object),
+    process: (oldValue, newValue, fn) => ({ children: fn(oldValue, newValue) }),
   },
   {
     type: 'same',
-    check: (b, a) => b === a,
+    check: (oldValue, newValue) => oldValue === newValue,
     process: processValues,
   },
   {
     type: 'changed',
-    check: (b, a) => b !== a,
+    check: (oldValue, newValue) => oldValue !== newValue,
     process: processValues,
   },
 ];
 
-const getpropertyActions = (b, a) => propertyActions.find(({ check }) => check(b, a));
+const getPropertyActions = (oldValue, newValue) => propertyActions
+  .find(({ check }) => check(oldValue, newValue));
 
 const buildAst = (oldConfig, newConfig) => Object.keys({ ...oldConfig, ...newConfig })
   .map((property) => {
     const oldValue = oldConfig[property];
     const newValue = newConfig[property];
-    const { type, process } = getpropertyActions(oldValue, newValue);
+    const { type, process } = getPropertyActions(oldValue, newValue);
     return {
       property, type, children: [], ...process(oldValue, newValue, buildAst),
     };

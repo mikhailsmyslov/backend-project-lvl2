@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const prefixes = {
+const prefixesList = {
   added: ['+'], deleted: ['-'], same: [' '], changed: ['-', '+'], nested: [' '],
 };
 
@@ -17,13 +17,14 @@ const render = (ast, spacesCount = 0) => {
   const mapped = ast.map(({
     property, type, oldValue, newValue, children,
   }) => {
-    const prefix = prefixes[type];
+    const prefixes = prefixesList[type];
 
     const values = type === 'nested'
       ? [render(children, spacesCount + 4)]
       : _.without([oldValue, newValue], undefined);
 
-    return prefix.map((p, i) => `${makeIndent(spacesCount + 2)}${p} ${property}: ${stringify(values[i], spacesCount + 4)}`);
+    return prefixes
+      .map((prefix, index) => `${makeIndent(spacesCount + 2)}${prefix} ${property}: ${stringify(values[index], spacesCount + 4)}`);
   });
 
   const text = _.flattenDeep(mapped).join('\n');
