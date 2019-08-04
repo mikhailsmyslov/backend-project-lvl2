@@ -1,34 +1,54 @@
 import _ from 'lodash';
 
-const prefixesList = {
-  added: ['+'], deleted: ['-'], same: [' '], changed: ['-', '+'], nested: [' '],
+const tab = '    ';
+const doubleSpace = '  ';
+
+const format = (value, indent) => {
+  if (_.isObject(value)) {
+    const newIndent = indent.concat(doubleSpace);
+    const text = Object.entries(value).map(([key, val]) => `${newIndent}${tab}${key}: ${val}`).join('\n');
+    return `{\n${text}\n${newIndent}}`;
+  }
+  return value;
 };
 
-const makeIndent = spacesCount => ' '.repeat(spacesCount);
+const propertyActions = [
+  {
+    type: 'added',
+    process: ({ property, newValue }, indent) => `${indent}+ ${property}: ${format(newValue, indent)}`,
+  },
+  {
+    type: 'deleted',
+    process: ({ property, oldValue }, indent) => `${indent}- ${property}: ${format(oldValue, indent)}`,
+  },
+  {
+    type: 'changed',
+    process: ({ property, oldValue, newValue }, indent) => [
+      `${indent}- ${property}: ${format(oldValue, indent)}`,
+      `${indent}+ ${property}: ${format(newValue, indent)}`,
+    ],
+  },
+  {
+    type: 'same',
+    process: ({ property, oldValue }, indent) => `${indent}  ${property}: ${format(oldValue, indent)}`,
+  },
+  {
+    type: 'nested',
+    process: ({ property, children }, indent, fn) => `${indent}  ${property}: ${fn(children, indent.concat(doubleSpace))}`,
+  },
+];
 
-const stringify = (value, spacesCount) => {
-  if (!_.isObject(value)) return value;
-  const text = Object.entries(value)
-    .map(([key, val]) => `${makeIndent(spacesCount + 4)}${key}: ${val}`).join('\n');
-  return `{\n${text}\n${makeIndent(spacesCount)}}`;
-};
+const getPropertyAction = item => propertyActions.find(({ type }) => item.type === type);
 
-const render = (ast, spacesCount = 0) => {
-  const mapped = ast.map(({
-    property, type, oldValue, newValue, children,
-  }) => {
-    const prefixes = prefixesList[type];
-
-    const values = type === 'nested'
-      ? [render(children, spacesCount + 4)]
-      : _.without([oldValue, newValue], undefined);
-
-    return prefixes
-      .map((prefix, index) => `${makeIndent(spacesCount + 2)}${prefix} ${property}: ${stringify(values[index], spacesCount + 4)}`);
-  });
-
-  const text = _.flattenDeep(mapped).join('\n');
-  return `{\n${text}\n${makeIndent(spacesCount)}}`;
+const render = (ast, currentIndent = '') => {
+  const nextIndent = currentIndent.concat(doubleSpace);
+  const text = _.flattenDeep(
+    ast.map((item) => {
+      const { process } = getPropertyAction(item);
+      return process(item, nextIndent, render);
+    }),
+  ).join('\n');
+  return `{\n${text}\n${currentIndent}}`;
 };
 
 export default render;
