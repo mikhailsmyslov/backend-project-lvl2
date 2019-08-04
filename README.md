@@ -13,16 +13,21 @@ Utility compares two configuration files and shows a difference. Works with .jso
 Output could be setted as a plain text, json or stringified tree structure.
 
 ### Installation
-`npm install gendiff -g`
+`npm install gendiff -g`  
+
+[Installation demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_installation.gif?raw=true)
 
 ### Usage
-[![asciicast](https://asciinema.org/a/44UQr2cncup4FLfHvlASIMah1.svg)](https://asciinema.org/a/44UQr2cncup4FLfHvlASIMah1)
-
 `gendiff [options] <firstConfig> <secondConfig>`  
 
-#### Options
 `-f plain` - set output as a plain text;  
+[Plain demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_plain.gif?raw=true)
+  
 `-f json` - set output as a json string;  
-default (no option `-f` specified) - stringified tree structure;  
+[JSON demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_json.gif?raw=true)
+  
+#### Options
+  `-V, --version`        output the version number  
+  `-f, --format [type]`  output format  
+  `-h, --help`           output usage information  
 
-For other options use `gendiff -h`
