@@ -28,6 +28,10 @@ Example of usage with output setted as json:
 `gendiff -f json <firstConfig> <secondConfig>`   
 ![JSON demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_json.gif?raw=true)
   
+Example of usage with default output:  
+`gendiff <firstConfig> <secondConfig>`   
+![Default output](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_default.gif?raw=true)
+  
 #### Options
   `-V, --version`        output the version number  
   `-f, --format [type]`  output format  
