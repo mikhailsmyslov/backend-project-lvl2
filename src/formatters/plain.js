@@ -2,24 +2,42 @@ import _ from 'lodash';
 
 const stringify = (value) => {
   if (_.isObject(value)) return "'[complex value]'";
-  return _.isString(value) ? `'${value}'` : value;
+  if (_.isString(value)) return `'${value}'`;
+  return value;
 };
 
-const propertyActions = {
-  added: ({ newValue }) => `added with value: ${stringify(newValue)}`,
-  deleted: () => 'deleted',
-  changed: ({ oldValue, newValue }) => `changed from ${stringify(oldValue)} to ${stringify(newValue)}`,
-};
+const propertyActions = [
+  {
+    type: 'added',
+    process: ({ property, newValue }, path) => `Property '${path}${property}' was added with value: ${stringify(newValue)}`,
+  },
+  {
+    type: 'deleted',
+    process: ({ property }, path) => `Property '${path}${property}' was deleted`,
+  },
+  {
+    type: 'changed',
+    process: (
+      { property, oldValue, newValue }, path,
+    ) => `Property '${path}${property}' was changed from ${stringify(oldValue)} to ${stringify(newValue)}`,
+  },
+  {
+    type: 'nested',
+    process: ({ property, children }, path, fn) => fn(children, `${path}${property}.`),
+  },
+  {
+    type: 'same',
+    process: () => [],
+  },
+];
 
-const render = (ast, path = '') => {
-  const filtered = ast.filter(item => item.type !== 'same');
-  const mapped = filtered.map((item) => {
-    const { property, type, children } = item;
-    return type === 'nested'
-      ? render(children, `${path}${property}.`)
-      : `Property '${path}${property}' was ${propertyActions[type](item)}`;
-  });
-  return _.flattenDeep(mapped).join('\n');
-};
+const getPropertyActions = item => propertyActions.find(({ type }) => item.type === type);
+
+const render = (ast, path = '') => _.flattenDeep(
+  ast.map((item) => {
+    const { process } = getPropertyActions(item);
+    return process(item, path, render);
+  }),
+).join('\n');
 
 export default render;

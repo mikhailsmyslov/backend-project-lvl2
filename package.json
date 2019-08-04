@@ -1,6 +1,6 @@
 {
   "name": "gendiff",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "description": "backend-project-lvl2",
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
