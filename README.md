@@ -20,10 +20,12 @@ Output could be setted as a plain text, json or stringified tree structure.
 ### Usage
 `gendiff [options] <firstConfig> <secondConfig>`  
 
-`-f plain` - set output as a plain text;  
+Example of usage with output setted as plain text:  
+`gendiff -f plain <firstConfig> <secondConfig>`   
 ![Plain demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_plain.gif?raw=true)
   
-`-f json` - set output as a json string;  
+Example of usage with output setted as json:  
+`gendiff -f json <firstConfig> <secondConfig>`   
 ![JSON demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_json.gif?raw=true)
   
 #### Options

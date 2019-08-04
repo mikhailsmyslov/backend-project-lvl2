@@ -2,6 +2,10 @@
   "name": "gendiff",
   "version": "3.2.4",
   "description": "backend-project-lvl2",
+  "keywords": [
+    "gendiff",
+    "Hexlet"
+  ],  
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
   },
