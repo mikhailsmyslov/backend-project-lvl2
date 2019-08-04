@@ -15,16 +15,16 @@ Output could be setted as a plain text, json or stringified tree structure.
 ### Installation
 `npm install gendiff -g`  
 
-[Installation demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_installation.gif?raw=true)
+![Installation demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_installation.gif?raw=true)
 
 ### Usage
 `gendiff [options] <firstConfig> <secondConfig>`  
 
 `-f plain` - set output as a plain text;  
-[Plain demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_plain.gif?raw=true)
+![Plain demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_plain.gif?raw=true)
   
 `-f json` - set output as a json string;  
-[JSON demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_json.gif?raw=true)
+![JSON demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_json.gif?raw=true)
   
 #### Options
   `-V, --version`        output the version number  
