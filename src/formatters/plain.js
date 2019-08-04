@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const stringify = (value) => {
+const format = (value) => {
   if (_.isObject(value)) return "'[complex value]'";
   if (_.isString(value)) return `'${value}'`;
   return value;
@@ -9,7 +9,7 @@ const stringify = (value) => {
 const propertyActions = [
   {
     type: 'added',
-    process: ({ property, newValue }, path) => `Property '${path}${property}' was added with value: ${stringify(newValue)}`,
+    process: ({ property, newValue }, path) => `Property '${path}${property}' was added with value: ${format(newValue)}`,
   },
   {
     type: 'deleted',
@@ -19,7 +19,7 @@ const propertyActions = [
     type: 'changed',
     process: (
       { property, oldValue, newValue }, path,
-    ) => `Property '${path}${property}' was changed from ${stringify(oldValue)} to ${stringify(newValue)}`,
+    ) => `Property '${path}${property}' was changed from ${format(oldValue)} to ${format(newValue)}`,
   },
   {
     type: 'nested',

@@ -12,31 +12,31 @@ const format = (value, indent) => {
   return value;
 };
 
-const stringify = (property, prefix, value, indent) => `${indent}${prefix} ${property}: ${format(value, indent)}`;
+const stringify = (indent, prefix, property, value) => `${indent}${prefix} ${property}: ${format(value, indent)}`;
 
 const propertyActions = [
   {
     type: 'added',
-    process: ({ property, newValue }, indent) => stringify(property, '+', newValue, indent),
+    process: ({ property, newValue }, indent) => stringify(indent, '+', property, newValue),
   },
   {
     type: 'deleted',
-    process: ({ property, oldValue }, indent) => stringify(property, '-', oldValue, indent),
+    process: ({ property, oldValue }, indent) => stringify(indent, '-', property, oldValue),
   },
   {
     type: 'changed',
     process: ({ property, oldValue, newValue }, indent) => [
-      stringify(property, '-', oldValue, indent),
-      stringify(property, '+', newValue, indent),
+      stringify(indent, '-', property, oldValue),
+      stringify(indent, '+', property, newValue),
     ],
   },
   {
     type: 'same',
-    process: ({ property, oldValue }, indent) => stringify(property, ' ', oldValue, indent),
+    process: ({ property, oldValue }, indent) => stringify(indent, ' ', property, oldValue),
   },
   {
     type: 'nested',
-    process: ({ property, children }, indent, fn) => `${indent}  ${property}: ${fn(children, indent.concat(doubleSpace))}`,
+    process: ({ property, children }, indent, fn) => stringify(indent, ' ', property, fn(children, indent.concat(doubleSpace))),
   },
 ];
 
@@ -44,12 +44,11 @@ const getPropertyAction = item => propertyActions.find(({ type }) => item.type =
 
 const render = (ast, currentIndent = '') => {
   const nextIndent = currentIndent.concat(doubleSpace);
-  const text = _.flattenDeep(
-    ast.map((item) => {
-      const { process } = getPropertyAction(item);
-      return process(item, nextIndent, render);
-    }),
-  ).join('\n');
+  const mapped = ast.map((item) => {
+    const { process } = getPropertyAction(item);
+    return process(item, nextIndent, render);
+  });
+  const text = _.flattenDeep(mapped).join('\n');
   return `{\n${text}\n${currentIndent}}`;
 };
 
