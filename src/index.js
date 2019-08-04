@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import _ from 'lodash';
 import parse from './parsers';
 import getFormatter from './formatters';
 
@@ -8,27 +9,27 @@ const processValues = (oldValue, newValue) => ({ oldValue, newValue });
 const propertyActions = [
   {
     type: 'added',
-    check: oldValue => oldValue === undefined,
+    check: oldValue => _.isUndefined(oldValue),
     process: processValues,
   },
   {
     type: 'deleted',
-    check: (oldValue, newValue) => newValue === undefined,
+    check: (oldValue, newValue) => _.isUndefined(newValue),
     process: processValues,
   },
   {
     type: 'nested',
-    check: (oldValue, newValue) => (oldValue instanceof Object) && (newValue instanceof Object),
+    check: (oldValue, newValue) => _.isObject(oldValue) && _.isObject(newValue),
     process: (oldValue, newValue, fn) => ({ children: fn(oldValue, newValue) }),
   },
   {
     type: 'same',
-    check: (oldValue, newValue) => oldValue === newValue,
+    check: (oldValue, newValue) => _.isEqual(oldValue, newValue),
     process: processValues,
   },
   {
     type: 'changed',
-    check: (oldValue, newValue) => oldValue !== newValue,
+    check: (oldValue, newValue) => !_.isEqual(oldValue, newValue),
     process: processValues,
   },
 ];
