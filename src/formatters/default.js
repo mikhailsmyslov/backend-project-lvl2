@@ -12,25 +12,27 @@ const format = (value, indent) => {
   return value;
 };
 
+const stringify = (property, prefix, value, indent) => `${indent}${prefix} ${property}: ${format(value, indent)}`;
+
 const propertyActions = [
   {
     type: 'added',
-    process: ({ property, newValue }, indent) => `${indent}+ ${property}: ${format(newValue, indent)}`,
+    process: ({ property, newValue }, indent) => stringify(property, '+', newValue, indent),
   },
   {
     type: 'deleted',
-    process: ({ property, oldValue }, indent) => `${indent}- ${property}: ${format(oldValue, indent)}`,
+    process: ({ property, oldValue }, indent) => stringify(property, '-', oldValue, indent),
   },
   {
     type: 'changed',
     process: ({ property, oldValue, newValue }, indent) => [
-      `${indent}- ${property}: ${format(oldValue, indent)}`,
-      `${indent}+ ${property}: ${format(newValue, indent)}`,
+      stringify(property, '-', oldValue, indent),
+      stringify(property, '+', newValue, indent),
     ],
   },
   {
     type: 'same',
-    process: ({ property, oldValue }, indent) => `${indent}  ${property}: ${format(oldValue, indent)}`,
+    process: ({ property, oldValue }, indent) => stringify(property, ' ', oldValue, indent),
   },
   {
     type: 'nested',
