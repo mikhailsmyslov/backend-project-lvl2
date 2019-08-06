@@ -1,18 +1,19 @@
 import fs from 'fs';
 import gendiff from '../src';
 
-const path = `${__dirname}/__fixtures__`;
+const path = `${__dirname}/__fixtures__/`;
 
-const expectedDefault = fs.readFileSync(`${path}/expectedDefault.txt`, 'UTF-8');
-const expectedPlain = fs.readFileSync(`${path}/expectedPlain.txt`, 'UTF-8');
+test.each(['.json', '.yml', '.ini'])('Tree %s',
+  (format) => {
+    const expected = fs.readFileSync(`${path}expectedTree.txt`, 'UTF-8');
+    const oldConfig = `${path}oldConfig${format}`;
+    const newConfig = `${path}newConfig${format}`;
+    expect(gendiff(oldConfig, newConfig)).toEqual(expected);
+  });
 
-const oldConfig = `${path}/oldConfig`;
-const newConfig = `${path}/newConfig`;
-
-test.each(['.json', '.yml', '.ini'])(
-  'Default %s',
-  format => expect(gendiff(`${oldConfig}${format}`, `${newConfig}${format}`))
-    .toEqual(expectedDefault),
-);
-
-test('Plain', () => expect(gendiff(`${oldConfig}.json`, `${newConfig}.json`, 'plain')).toEqual(expectedPlain));
+test('Plain', () => {
+  const expected = fs.readFileSync(`${path}expectedPlain.txt`, 'UTF-8');
+  const oldConfig = `${path}oldConfig.json`;
+  const newConfig = `${path}newConfig.json`;
+  expect(gendiff(oldConfig, newConfig, 'plain')).toEqual(expected);
+});

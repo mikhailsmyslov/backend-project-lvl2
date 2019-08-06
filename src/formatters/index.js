@@ -1,9 +1,9 @@
-import defaultFormatter from './default';
+import tree from './tree';
 import plain from './plain';
 import json from './json';
 
 const formatters = {
-  default: defaultFormatter,
+  tree,
   plain,
   json,
 };

@@ -7,9 +7,9 @@ import { version } from '../../package.json';
 program
   .version(version)
   .description('Compares two configuration files and shows a difference.')
-  .arguments('<firstConfig> <secondConfig>')
+  .arguments('<oldConfig> <newConfig>')
   .option('-f, --format [type]', 'output format')
-  .action((first, second) => console.log(gendiff(first, second, program.format)));
+  .action((oldConfig, newConfig) => console.log(gendiff(oldConfig, newConfig, program.format)));
 
 program.parse(process.argv);
 

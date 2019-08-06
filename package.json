@@ -5,7 +5,7 @@
   "keywords": [
     "gendiff",
     "Hexlet"
-  ],  
+  ],
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
   },

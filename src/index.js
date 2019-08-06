@@ -4,48 +4,54 @@ import _ from 'lodash';
 import parse from './parsers';
 import getFormatter from './formatters';
 
+const getPropertiesList = (obj1, obj2) => _.union(_.keys(obj1), _.keys(obj2));
 const processValues = (oldValue, newValue) => ({ oldValue, newValue });
 
 const propertyActions = [
   {
     type: 'added',
-    check: oldValue => _.isUndefined(oldValue),
+    check: (oldConfig, newConfig, property) => !_.has(oldConfig, property)
+      && _.has(newConfig, property),
     process: processValues,
   },
   {
     type: 'deleted',
-    check: (oldValue, newValue) => _.isUndefined(newValue),
+    check: (oldConfig, newConfig, property) => _.has(oldConfig, property)
+      && !_.has(newConfig, property),
     process: processValues,
   },
   {
     type: 'nested',
-    check: (oldValue, newValue) => _.isObject(oldValue) && _.isObject(newValue),
+    check: (oldConfig, newConfig, property) => _.isObject(oldConfig[property])
+      && _.isObject(newConfig[property]),
     process: (oldValue, newValue, fn) => ({ children: fn(oldValue, newValue) }),
   },
   {
     type: 'same',
-    check: (oldValue, newValue) => _.isEqual(oldValue, newValue),
+    check: (oldConfig, newConfig, property) => _.isEqual(oldConfig[property], newConfig[property]),
     process: processValues,
   },
   {
     type: 'changed',
-    check: (oldValue, newValue) => !_.isEqual(oldValue, newValue),
+    check: (oldConfig, newConfig, property) => !_.isEqual(oldConfig[property], newConfig[property]),
     process: processValues,
   },
 ];
 
-const getPropertyActions = (oldValue, newValue) => propertyActions
-  .find(({ check }) => check(oldValue, newValue));
+const getPropertyActions = (oldConfig, newConfig, property) => propertyActions
+  .find(({ check }) => check(oldConfig, newConfig, property));
 
-const buildAst = (oldConfig, newConfig) => Object.keys({ ...oldConfig, ...newConfig })
-  .map((property) => {
+const buildAst = (oldConfig, newConfig) => {
+  const properties = getPropertiesList(oldConfig, newConfig);
+  return properties.map((property) => {
+    const { type, process } = getPropertyActions(oldConfig, newConfig, property);
     const oldValue = oldConfig[property];
     const newValue = newConfig[property];
-    const { type, process } = getPropertyActions(oldValue, newValue);
     return {
       property, type, children: [], ...process(oldValue, newValue, buildAst),
     };
   });
+};
 
 const getParsedContent = (pathToFile) => {
   const format = path.extname(pathToFile);
@@ -53,7 +59,7 @@ const getParsedContent = (pathToFile) => {
   return parse(format, content);
 };
 
-export default (pathToFile1, pathToFile2, formatter = 'default') => {
+export default (pathToFile1, pathToFile2, formatter = 'tree') => {
   const oldConfig = getParsedContent(pathToFile1);
   const newCongif = getParsedContent(pathToFile2);
   const render = getFormatter(formatter);

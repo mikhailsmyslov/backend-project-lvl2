@@ -18,7 +18,7 @@ Output could be setted as a plain text, json or stringified tree structure.
 ![Installation demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_installation.gif?raw=true)
 
 ### Usage
-`gendiff [options] <firstConfig> <secondConfig>`  
+`gendiff [options] <oldConfig> <newConfig>`  
 
 Example of usage with output setted as plain text:  
 `gendiff -f plain <firstConfig> <secondConfig>`   
@@ -28,9 +28,9 @@ Example of usage with output setted as json:
 `gendiff -f json <firstConfig> <secondConfig>`   
 ![JSON demo](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_json.gif?raw=true)
   
-Example of usage with default output:  
-`gendiff <firstConfig> <secondConfig>`   
-![Default output](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_default.gif?raw=true)
+Example of usage with tree output (default one):  
+`gendiff <oldConfig> <newConfig>`   
+![Tree output](https://github.com/mikhailsmyslov/Pictures/blob/master/gendiff/demo_default.gif?raw=true)
   
 #### Options
   `-V, --version`        output the version number  
