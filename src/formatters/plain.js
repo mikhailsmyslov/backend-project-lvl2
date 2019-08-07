@@ -16,12 +16,11 @@ const propertyActions = {
   same: () => [],
 };
 
-const render = (ast, path = '') => {
-  const mapped = ast.map((item) => {
+const render = (ast, path = '') => _.flattenDeep(
+  ast.map((item) => {
     const process = propertyActions[item.type];
     return process(item, path, render);
-  });
-  return _.flattenDeep(mapped).join('\n');
-};
+  }),
+).join('\n');
 
 export default render;
