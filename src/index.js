@@ -4,7 +4,6 @@ import _ from 'lodash';
 import parse from './parsers';
 import getFormatter from './formatters';
 
-const getPropertiesList = (obj1, obj2) => _.union(_.keys(obj1), _.keys(obj2));
 const processValues = (oldValue, newValue) => ({ oldValue, newValue });
 
 const propertyActions = [
@@ -42,7 +41,7 @@ const getPropertyActions = (oldConfig, newConfig, property) => propertyActions
   .find(({ check }) => check(oldConfig, newConfig, property));
 
 const buildAst = (oldConfig, newConfig) => {
-  const properties = getPropertiesList(oldConfig, newConfig);
+  const properties = _.union(_.keys(oldConfig), _.keys(newConfig));
   return properties.map((property) => {
     const { type, process } = getPropertyActions(oldConfig, newConfig, property);
     const oldValue = oldConfig[property];
